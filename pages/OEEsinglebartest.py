@@ -7,31 +7,38 @@ import pyodbc
 import array
 from datetime import date as dte
 import plotly.graph_objects as go
+import dbcon
 
-cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
-                      database='ProefficientDB', trusted_connection='yes')
+# cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
+#                       database='ProefficientDB', trusted_connection='yes')
 
-cursor = cnxn.cursor()
+# cursor = cnxn.cursor()
 tablename1 = "Shift"
-df1 = pd.read_sql("SELECT * from {}".format(tablename1), cnxn)
-print(df1.columns)
+df1 = dbcon.tbl_Shift
+# pd.read_sql("SELECT * from {}".format(tablename1), cnxn)
+# print(df1.columns)
 tablename2 = "StopageReason"
-df2 = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
+df2 = dbcon.tbl_StopageReason
+# pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
 # print(df2)
 tablename3 = "ProductionEntry"
-df3 = pd.read_sql("SELECT * from {}".format(tablename3), cnxn)
+df3 = dbcon.tbl_ProductionEntry
+# pd.read_sql("SELECT * from {}".format(tablename3), cnxn)
 # print(df3)
 tablename4 = "MasterProduct"
-df4 = pd.read_sql("SELECT * from {}".format(tablename4), cnxn)
-# print(df4)
+df4 = dbcon.tbl_MasterProduct
+# pd.read_sql("SELECT * from {}".format(tablename4), cnxn)
+print(df4.columns)
 tablename5 = "BreakDownEntry"
-df5 = pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
+df5 = dbcon.tbl_BreakDownEntry
+# pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
 # print(df5)
 df6 = pd.merge(df5, df2, how="inner", on=["ReasonId"])
 # print(df4)
 df = pd.merge(df6, df1, how="inner", on=["ShiftId"])
 tablename7 = "MasterMachine"
-df7 = pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
+df7 = dbcon.tbl_MasterMachine
+# pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
 df6 = pd.merge(df6, df7, how="inner", on=["MachineID"])
 df3 = pd.merge(df3, df7, how="inner", on=["MachineID"])
 

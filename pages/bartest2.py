@@ -5,18 +5,22 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import dbcon
 
 import pyodbc
 
-cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
-                      database='ProefficientDB', trusted_connection='yes')
+# cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
+#                       database='ProefficientDB', trusted_connection='yes')
 
-tablename7 = "MasterMachine"
-machinedata = pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
-tablename2 = "StopageReason"
-reasondata = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
-tablename5 = "BreakDownEntry"
-breakdowndata = pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
+# tablename7 = "MasterMachine"
+# machinedata = pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
+# tablename2 = "StopageReason"
+# reasondata = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
+# tablename5 = "BreakDownEntry"
+# breakdowndata = pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
+breakdowndata = dbcon.tbl_BreakDownEntry
+machinedata = dbcon.tbl_MasterMachine
+reasondata = dbcon.tbl_StopageReason
 df1 = pd.merge(breakdowndata, machinedata, how="inner", on=["MachineID"])
 df = pd.merge(df1, reasondata, how="inner", on=["ReasonId"])
 machinelist = df.MachineName.unique()

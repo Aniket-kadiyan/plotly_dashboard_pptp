@@ -7,18 +7,22 @@ import pyodbc
 import array
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import dbcon
 
-cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',database='ProefficientDB', trusted_connection='yes')
+# cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',database='ProefficientDB', trusted_connection='yes')
 
-cursor = cnxn.cursor()
+# cursor = cnxn.cursor()
 tablename1 = "ProductionRejectReasonMapping"
-df1 = pd.read_sql("SELECT * from {}".format(tablename1), cnxn)
+df1 = dbcon.tbl_ProductionRejectReasonMapping
+# pd.read_sql("SELECT * from {}".format(tablename1), cnxn)
 # print(df1)
 tablename2 = "RejectionReason"
-df2 = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
+df2 = dbcon.tbl_RejectionReason
+# pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
 # print(df2)
 tablename3 = "ProductionEntry"
-df3 = pd.read_sql("SELECT * from {}".format(tablename3), cnxn)
+df3 = dbcon.tbl_ProductionEntry
+# pd.read_sql("SELECT * from {}".format(tablename3), cnxn)
 # print(df3)
 df4 = pd.merge(df1, df2, how="inner", on=["ReasonId"])
 # print(df4)

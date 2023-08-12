@@ -6,16 +6,20 @@ import pandas as pd
 import plotly.graph_objects as go
 import random
 import pyodbc
+import dbcon
 
-cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
-                      database='ProefficientDB', trusted_connection='yes')
+# cnxn = pyodbc.connect(driver='{SQL Server}', server='ANIKETKADIYAN-P\AKSERVER',
+#                       database='ProefficientDB', trusted_connection='yes')
 
-tablename7 = "MasterMachine"
-machinedata = pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
-tablename2 = "StopageReason"
-reasondata = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
-tablename5 = "BreakDownEntry"
-breakdowndata = pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
+# tablename7 = "MasterMachine"
+# machinedata = pd.read_sql("SELECT * from {}".format(tablename7), cnxn)
+# tablename2 = "StopageReason"
+# reasondata = pd.read_sql("SELECT * from {}".format(tablename2), cnxn)
+# tablename5 = "BreakDownEntry"
+# breakdowndata = pd.read_sql("SELECT * from {}".format(tablename5), cnxn)
+breakdowndata = dbcon.tbl_BreakDownEntry
+machinedata = dbcon.tbl_MasterMachine
+reasondata = dbcon.tbl_StopageReason
 df1 = pd.merge(breakdowndata, machinedata, how="inner", on=["MachineID"])
 df = pd.merge(df1, reasondata, how="inner", on=["ReasonId"])
 labellist = [*df.MachineName.unique(), *df.ReasonName.unique()]
@@ -24,7 +28,7 @@ reasonlist = df.ReasonName.unique()
 sourcelist = []
 destinationlist = []
 valuelist = []
-print(machinelist, "\n\n", reasonlist)
+# print(machinelist, "\n\n", reasonlist)
 colors = {
     'background': '#111111',
     'text': 'rgb(0,0,0)'
@@ -35,13 +39,13 @@ def populateGraph(mlist, rlist):
     # sourcelist = []
     # destinationlist = []
     # valuelist = []
-    print(mlist, rlist)
+    # print(mlist, rlist)
     for machine in mlist:
         dff = df[df.MachineName == machine]
         dfg = dff.groupby(['ReasonName'])[
             'ReasonName'].count().reset_index(name='count')
-        print("machine name:::", machine,
-              "\nreasons::: ", dfg.ReasonName.unique())
+        # print("machine name:::", machine,
+        #       "\nreasons::: ", dfg.ReasonName.unique())
         for reason in rlist:
             if (reason in dfg.ReasonName.unique()):
                 sourcelist.append(labellist.index(machine))
@@ -53,7 +57,7 @@ def populateGraph(mlist, rlist):
 
 
 populateGraph(machinelist, reasonlist)
-print(px.colors.qualitative.Plotly)
+# print(px.colors.qualitative.Plotly)
 # print(valuelist)
 
 dash.register_page(__name__, external_stylesheets=[dbc.themes.DARKLY],src="/sankey")
@@ -107,13 +111,13 @@ def render_content(mlisti, rlisti):
     sourcelist = []
     destinationlist = []
     valuelist = []
-    print(mlisti, rlisti)
+    # print(mlisti, rlisti)
     for machine in mlisti:
         dff = df[df.MachineName == machine]
         dfg = dff.groupby(['ReasonName'])[
             'ReasonName'].count().reset_index(name='count')
-        print("machine name:::", machine,
-              "\nreasons::: ", dfg.ReasonName.unique())
+        # print("machine name:::", machine,
+        #       "\nreasons::: ", dfg.ReasonName.unique())
         for reason in rlisti:
             if (reason in dfg.ReasonName.unique()):
                 sourcelist.append(labellist.index(machine))

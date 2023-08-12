@@ -1,8 +1,10 @@
 from dash import Dash, html, dcc
 import dash
 import dash_bootstrap_components as dbc
+from waitress import serve
 app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.DARKLY])
 application = app.server
+serve(application)
 app.layout = html.Div([
 
     html.Div(
@@ -20,4 +22,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-	app.run(debug=False, port=8050)
+	app.run(debug=True, port=8050)
